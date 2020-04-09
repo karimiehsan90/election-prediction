@@ -1,0 +1,4 @@
+[Service]
+ExecStart={{ kafka_path }}/bin/kafka-server-start.sh {{ kafka_path }}/config/server.properties
+User={{ kafka_user }}
+Group={{ kafka_group }}

@@ -1,0 +1,80 @@
+---
+- name: Ensure {{ kafka_group }} group exists
+  become: true
+  group:
+    name: "{{ kafka_group }}"
+    state: present
+
+- name: Ensure {{ kafka_user }} user exists
+  become: true
+  user:
+    name: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    state: present
+    shell: /bin/bash
+
+- name: Download kafka tarball
+  become: true
+  get_url:
+    url: "{{ kafka_tarball_url }}"
+    dest: "{{ kafka_dir }}"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+  notify: Restart kafka
+
+- name: Unarchieve kafka tarball
+  become: true
+  unarchive:
+    src: "{{ kafka_dir }}/{{ kafka_tarball_name }}"
+    dest: "{{ kafka_dir }}"
+    creates: "{{ kafka_dir }}/{{ kafka_dir_name }}"
+    group: "{{ kafka_group }}"
+    owner: "{{ kafka_user }}"
+    remote_src: true
+  notify: Restart kafka
+
+- name: Create symlink to kafka directory
+  become: true
+  file:
+    src: "{{ kafka_dir }}/{{ kafka_dir_name }}"
+    dest: "{{ kafka_path }}"
+    state: link
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+  notify: Restart kafka
+
+- name: Ensure data directory exists
+  become: true
+  file:
+    path: "{{ kafka_data_dir }}"
+    state: directory
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+  notify: Restart kafka
+
+- name: Create symlink to logs directory
+  become: true
+  file:
+    src: "{{ kafka_path }}/logs"
+    dest: "{{ kafka_logs_dir }}"
+    state: link
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    force: true
+  notify: Restart kafka
+
+- name: Copy service file
+  become: true
+  template:
+    src: kafka.service.j2
+    dest: /etc/systemd/system/kafka.service
+    owner: root
+    group: root
+  notify: Restart kafka
+
+- name: Start kafka service
+  become: true
+  systemd:
+    name: kafka
+    daemon_reload: true
+    state: started

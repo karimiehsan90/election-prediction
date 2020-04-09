@@ -1,0 +1,8 @@
+---
+- hosts: kafka-machines
+  vars:
+    ansible_user: vagrant
+  roles:
+    - role: kafka
+  environment:
+    JAVA_HOME: /home/vagrant/jdk

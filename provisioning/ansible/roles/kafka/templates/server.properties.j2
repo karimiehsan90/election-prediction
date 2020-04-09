@@ -1,0 +1,14 @@
+{% for host in (kafka_hosts | sort) %}
+{% if host == inventory_hostname %}
+broker.id={{ loop.index0 }}
+{% endif %}
+{% endfor %}
+listeners=PLAINTEXT://{{ kafka_bind_ip }}:{{ kafka_port }}
+advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+log.dirs={{ kafka_data_dir }}
+num.partitions={{ kafka_hosts | length }}
+offsets.topic.replication.factor=1
+log.retention.hours={{ kafka_log_retention_hours }}
+log.retention.bytes={{ kafka_log_retention_bytes }}
+zookeeper.connect={{ kafka_zookeeper_quorum }}
+zookeeper.connection.timeout.ms={{ kafka_zookeeper_timeout_ms }}

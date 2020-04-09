@@ -1,0 +1,5 @@
+---
+- name: Wait for {{ kafka_port }}
+  wait_for:
+    port: "{{ kafka_port }}"
+    timeout: 5
