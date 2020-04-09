@@ -1,0 +1,9 @@
+---
+- name: Copy server.properties
+  become: true
+  template:
+    src: server.properties.j2
+    dest: "{{ kafka_path }}/config/server.properties"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+  notify: Restart kafka
