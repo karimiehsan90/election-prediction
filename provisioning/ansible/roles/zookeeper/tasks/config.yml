@@ -1,0 +1,24 @@
+---
+- name: Copy myid file
+  become: true
+  template:
+    src: myid.j2
+    dest: "{{ zookeeper_data_dir }}/myid"
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+  notify: Restart zookeeper
+
+- name: Configure zoo.cfg
+  become: true
+  template:
+    src: zoo.cfg.j2
+    dest: "{{ zookeeper_path }}/conf/zoo.cfg"
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+  notify: Restart zookeeper
+
+- name: Ensure sample config file removed
+  become: true
+  file:
+    path: "{{ zookeeper_path }}/conf/zoo_sample.cfg"
+    state: absent

@@ -1,0 +1,60 @@
+---
+- name: Ensure zookeeper group exists
+  become: true
+  group:
+    name: "{{ zookeeper_group }}"
+    state: present
+
+- name: Ensure zookeeper user exists
+  become: true
+  user:
+    name: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+    state: present
+  
+- name: Download zookeeper tarball
+  become: true
+  get_url:
+    url: "{{ zookeeper_tarball_url }}"
+    dest: "{{ zookeeper_dir }}"
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+
+- name: Unarchieve file
+  become: true
+  unarchive:
+    src: "{{ zookeeper_dir }}/{{ zookeeper_tarball_name }}"
+    dest: "{{ zookeeper_dir }}"
+    creates: "{{ zookeeper_dir }}/{{ zookeeper_dirname }}"
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+    remote_src: yes
+
+- name: Ensure symlink exists
+  become: true
+  file:
+    src: "{{ zookeeper_dir }}/{{ zookeeper_dirname }}"
+    path: "{{ zookeeper_path }}"
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+    state: link
+
+- name: Ensure data and logs directories exists
+  become: true
+  file:
+    path: "{{ item }}"
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+    state: directory
+  loop:
+    - "{{ zookeeper_data_dir }}"
+    - "{{ zookeeper_logs_dir }}"
+
+- name: Ensure Service file exists
+  become: true
+  template:
+    src: zookeeper.service.j2
+    dest: /etc/systemd/system/zookeeper.service
+    owner: root
+    group: root
+  notify: Restart zookeeper

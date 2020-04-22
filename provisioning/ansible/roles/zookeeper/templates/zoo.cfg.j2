@@ -1,0 +1,16 @@
+# The number of milliseconds of each tick
+tickTime={{ zookeeper_tick_time_ms }}
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+dataDir={{ zookeeper_data_dir }}
+dataLogDir={{ zookeeper_logs_dir }}
+clientPort={{ zookeeper_client_port }}
+maxClientCnxns=200
+
+{% for server in zookeeper_servers | sort %}
+server.{{ loop.index0 }}={{ server }}:2888:3888
+{% endfor %}

@@ -1,0 +1,5 @@
+[Service]
+ExecStart={{ zookeeper_path }}/bin/zkServer.sh start-foreground
+ExecStop={{ zookeeper_path }}/bin/zkServer.sh stop
+User={{ zookeeper_user }}
+Group={{ zookeeper_group }}
