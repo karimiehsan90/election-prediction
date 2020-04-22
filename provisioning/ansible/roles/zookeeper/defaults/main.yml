@@ -1,0 +1,14 @@
+---
+zookeeper_group: zookeeper
+zookeeper_user: zookeeper
+zookeeper_version: 3.4.12
+zookeeper_dirname: "zookeeper-{{ zookeeper_version }}"
+zookeeper_tarball_name: "{{ zookeeper_dirname }}.tar.gz"
+zookeeper_tarball_url: http://main:8080/{{ zookeeper_tarball_name }}
+zookeeper_dir: /opt
+zookeeper_path: /opt/zookeeper
+zookeeper_data_dir: /var/data/zookeeper
+zookeeper_logs_dir: /var/logs/zookeeper
+zookeeper_client_port: 2181
+zookeeper_tick_time_ms: 1000
+zookeeper_servers: "{{ groups['zookeeper-machines'] }}"

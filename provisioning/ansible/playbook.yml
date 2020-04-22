@@ -1,4 +1,10 @@
 ---
+- hosts: zookeeper-machines
+  vars:
+    ansible_user: vagrant
+  roles:
+    - role: zookeeper
+
 - hosts: kafka-machines
   vars:
     ansible_user: vagrant

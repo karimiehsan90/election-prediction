@@ -1,0 +1,20 @@
+---
+- import_tasks: install.yml
+
+- import_tasks: config.yml
+
+- name: Ensure zookeeper started
+  become: true
+  service:
+    name: zookeeper
+    daemon_reload: true
+    enabled: true
+    state: started
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Validate zookeeper is up
+  wait_for:
+    port: "{{ zookeeper_client_port }}"
+    timeout: 30
