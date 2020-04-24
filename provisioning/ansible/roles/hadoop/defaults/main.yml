@@ -1,0 +1,14 @@
+---
+hadoop_version:
+hadoop_dir_name:
+hadoop_tarball_name:
+hadoop_tarball_url:
+hadoop_dir_dest:
+hadoop_path:
+hadoop_master:
+hadoop_user:
+hadoop_group:
+hadoop_replication:
+hadoop_slaves:
+hadoop_jdk_path:
+hadoop_first_run:
