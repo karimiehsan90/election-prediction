@@ -1,0 +1,22 @@
+---
+- name: Download jdk tarball
+  become: true
+  get_url:
+    url: "{{ jdk_tarball_url }}"
+    dest: "{{ jdk_dir_dest }}"
+
+- name: Unarchieve jdk tarball
+  become: true
+  unarchive:
+    src: "{{ jdk_dir_dest }}/{{ jdk_tarball_name }}"
+    dest: "{{ jdk_dir_dest }}"
+    creates: "{{ jdk_dir_dest }}/{{ jdk_dirname }}"
+    remote_src: true
+
+- name: Ensure symlink exists
+  become: true
+  file:
+    src: "{{ jdk_dir_dest }}/{{ jdk_dirname }}/"
+    dest: "{{ jdk_path }}"
+    remote_src: true
+    state: link

@@ -1,0 +1,4 @@
+---
+- name: Validate jdk installed
+  command: java -version
+  changed_when: false

@@ -1,0 +1,9 @@
+---
+- name: Check required variables
+  assert:
+    that:
+      - jdk_tarball_url | mandatory
+      - jdk_dir_dest | mandatory
+      - jdk_tarball_name | mandatory
+      - jdk_dirname | mandatory
+      - jdk_path | mandatory

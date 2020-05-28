@@ -1,0 +1,4 @@
+project-machines:
+  vars:
+    ansible_ssh_pass: vagrant
+    ansible_sudo_pass: vagrant

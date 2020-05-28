@@ -1,14 +1,13 @@
 ---
+- hosts: project-machines
+  roles:
+    - etc-hosts
+    - jdk
+
 - hosts: zookeeper-machines
-  vars:
-    ansible_user: vagrant
   roles:
     - role: zookeeper
 
 - hosts: kafka-machines
-  vars:
-    ansible_user: vagrant
   roles:
     - role: kafka
-  environment:
-    JAVA_HOME: /home/vagrant/jdk

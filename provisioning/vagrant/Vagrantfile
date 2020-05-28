@@ -1,0 +1,24 @@
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu1604"
+  config.vm.box_url = "http://main:8080/libvirt.box"
+
+  config.vm.define "master" do |host|
+    host.vm.network :private_network,ip: '192.168.100.101'
+    host.vm.hostname = "master"
+    host.vm.provider :libvirt do |libvirt|
+      libvirt.memory = 1024
+      libvirt.cpus = 2
+    end
+  end
+
+  config.vm.define "slave-1" do |host|
+    host.vm.network :private_network,ip: '192.168.100.102'
+    host.vm.hostname = "slave-1"
+    host.vm.provider :libvirt do |libvirt|
+      libvirt.memory = 1024
+      libvirt.cpus = 2
+    end
+  end
+end

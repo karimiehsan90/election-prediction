@@ -1,0 +1,3 @@
+{% for root_dns in etc_hosts_root_dns %}
+nameserver {{ root_dns }}
+{% endfor %}
