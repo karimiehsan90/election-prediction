@@ -1,0 +1,18 @@
+---
+hadoop-machines:
+  children:
+    hadoop-masters:
+    hadoop-slaves:
+  vars:
+    hadoop_version: 2.7.7
+    hadoop_dir_name: "hadoop-{{ hadoop_version }}"
+    hadoop_tarball_name: "{{ hadoop_dir_name }}.tar.gz"
+    hadoop_tarball_url: "http://main:8080/{{ hadoop_tarball_name }}"
+    hadoop_dir_dest: /opt
+    hadoop_path: "{{ hadoop_dir_dest }}/hadoop"
+    hadoop_master: "{{ groups['hadoop-masters'] | first }}"
+    hadoop_user: "{{ ansible_user }}"
+    hadoop_group: "{{ ansible_user }}"
+    hadoop_slaves: "{{ groups['hadoop-slaves'] }}"
+    hadoop_jdk_path: /opt/jdk
+    hadoop_first_run: true

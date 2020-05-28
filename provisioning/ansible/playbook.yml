@@ -11,3 +11,7 @@
 - hosts: kafka-machines
   roles:
     - role: kafka
+
+- hosts: hadoop-machines
+  roles:
+    - hadoop

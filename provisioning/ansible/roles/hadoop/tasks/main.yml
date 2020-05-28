@@ -1,0 +1,122 @@
+---
+- name: Ensure hadoop group exists
+  group:
+    name: "{{ hadoop_group }}"
+    state: present
+  become: true
+
+- name: Ensure hadoop user exists
+  user:
+    name: "{{ hadoop_user }}"
+    group: "{{ hadoop_group }}"
+    state: present
+  become: true
+  
+- name: Download hadoop tarball
+  get_url:
+    url: "{{ hadoop_tarball_url }}"
+    dest: "{{ hadoop_dir_dest }}"
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_group }}"
+  become: true
+
+- name: Unarchieve file
+  unarchive:
+    src: "{{ hadoop_dir_dest }}/{{ hadoop_tarball_name }}"
+    dest: "{{ hadoop_dir_dest }}"
+    creates: "{{ hadoop_dir_dest }}/{{ hadoop_dir_name }}"
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_group }}"
+    remote_src: yes
+  become: true
+
+- name: Make symlink to hadoop dir
+  file:
+    src: "{{ hadoop_dir_dest }}/{{ hadoop_dir_name }}"
+    path: "{{ hadoop_path }}"
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_group }}"
+    state: link
+  become: true
+
+- name: Add hadoop to environment variables
+  lineinfile:
+    path: "/home/{{ hadoop_user }}/.bashrc"
+    line: "{{ item }}"
+    state: present
+  loop:
+    - "export HADOOP_HOME={{ hadoop_path }}"
+    - "export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
+    - 'export HDFS_NAMENODE_USER="{{ hadoop_user }}"'
+    - 'export HDFS_DATANODE_USER="{{ hadoop_user }}"'
+    - 'export HDFS_SECONDARYNAMENODE_USER="{{ hadoop_user }}"'
+    - 'export YARN_RESOURCEMANAGER_USER="{{ hadoop_user }}"'
+    - 'export YARN_NODEMANAGER_USER="{{ hadoop_user }}"'
+    - 'export HADOOP_PREFIX={{ hadoop_path }}'
+  become: true
+
+- name: Copy configurations to servers
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ hadoop_path }}/etc/hadoop/{{ item }}"
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_group }}"
+  loop:
+    - core-site.xml
+    - hdfs-site.xml
+    - mapred-site.xml
+    - yarn-site.xml
+    - slaves
+  become: true
+
+- name: Export JAVA_HOME in hadoop-env.sh
+  lineinfile:
+    path: "{{ hadoop_path }}/etc/hadoop/hadoop-env.sh"
+    line: "export JAVA_HOME={{ hadoop_jdk_path }}"
+    state: present
+  become: true
+
+- name: Format namenode
+  command: "{{ hadoop_path }}/bin/hdfs namenode -format -force"
+  become: true
+  become_user: "{{ hadoop_user }}"
+  changed_when: true
+  when: "{{ hadoop_first_run }}"
+
+- name: Ensure .ssh exists in hadoop user
+  file:
+    path: "/home/{{ hadoop_user }}/.ssh"
+    state: directory
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_group }}"
+    mode: 01700
+  become: true
+
+- name: Generate keys
+  command: ssh-keygen -t rsa -f .ssh/id_rsa -P '' -N ''
+  when: "{{ hadoop_first_run }}"
+
+- name: Get master public key
+  command: cat "/home/{{ hadoop_user }}/.ssh/id_rsa.pub"
+  delegate_to: "{{ hadoop_master }}"
+  register: public_key
+  changed_when: false
+
+- name: Set authorized keys
+  copy:
+    dest: "/home/{{ hadoop_user }}/.ssh/authorized_keys"
+    content: "{{ public_key.stdout }}"
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_group }}"
+    mode: 0600
+  become: true
+
+- name: Add hosts to known hosts
+  include_tasks: add-known-host.yml
+  loop: "{{ hadoop_slaves + [hadoop_master, '0.0.0.0'] }}"
+  loop_control:
+    loop_var: host
+
+- name: Start namenode
+  command: "{{ hadoop_path }}/sbin/start-all.sh"
+  when: inventory_hostname == hadoop_master

@@ -1,0 +1,15 @@
+---
+- name: Get content of public key
+  command: "ssh-keyscan {{ host }}"
+  register: host_public_key
+  changed_when: false
+
+- name: Add hosts to knows hosts
+  lineinfile:
+    create: true
+    path: "/home/{{ hadoop_user }}/.ssh/known_hosts"
+    line: "{{ line }}"
+    state: present
+  loop: "{{ host_public_key.stdout_lines }}"
+  loop_control:
+    loop_var: line
