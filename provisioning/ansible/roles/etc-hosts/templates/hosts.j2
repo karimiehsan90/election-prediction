@@ -1,0 +1,5 @@
+127.0.0.1 localhost
+
+{% for host in etc_hosts | sort %}
+{{ hostvars[host].ansible_host }} {{ hostvars[host].ansible_hostname }}
+{% endfor %}

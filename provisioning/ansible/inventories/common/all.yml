@@ -1,0 +1,6 @@
+---
+all:
+  vars:
+    etc_hosts: "{{ groups['all'] }}"
+    etc_hosts_root_dns:
+      - 8.8.8.8

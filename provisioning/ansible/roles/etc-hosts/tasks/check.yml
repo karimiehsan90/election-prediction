@@ -1,0 +1,6 @@
+---
+- name: Check required variables
+  assert:
+    that:
+      - etc_hosts | length > 0
+      - etc_hosts_root_dns | length > 0

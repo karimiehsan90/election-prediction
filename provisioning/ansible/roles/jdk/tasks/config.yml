@@ -1,0 +1,20 @@
+---
+- name: Add JAVA_HOME to /etc/environment
+  become: true
+  lineinfile:
+    path: /etc/environment
+    line: "{{ item }}"
+    state: present
+  loop:
+    - "JAVA_HOME={{ jdk_path }}"
+
+- name: Create symlink for java binaries
+  become: true
+  file:
+    src: "{{ jdk_path }}/bin/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    state: link
+  loop:
+    - jar
+    - java
+    - jps

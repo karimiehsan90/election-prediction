@@ -1,0 +1,17 @@
+---
+all:
+  vars:
+    jdk_tarball_version: 8u192
+    jdk_tarball_name: "jdk-{{ jdk_tarball_version }}-linux-x64.tar.gz"
+    jdk_tarball_url: "http://main:8080/{{ jdk_tarball_name }}"
+    jdk_dir_dest: /opt
+    jdk_version: 1.8.0_192
+    jdk_dirname: "jdk{{ jdk_version }}"
+    jdk_path: /opt/jdk
+
+    mvn_tarball_name: "{{ mvn_dirname }}-bin.tar.gz"
+    mvn_tarball_url: "http://main:8080/{{ mvn_tarball_name }}"
+    mvn_dir_dest: /opt
+    mvn_version: 3.6.3
+    mvn_dirname: "apache-maven-{{ mvn_version }}"
+    mvn_path: /opt/mvn

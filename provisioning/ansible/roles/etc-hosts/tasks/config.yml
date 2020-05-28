@@ -1,0 +1,12 @@
+---
+- name: Copy /etc/hosts
+  become: true
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+
+- name: Copy /etc/resolv.conf
+  become: true
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf

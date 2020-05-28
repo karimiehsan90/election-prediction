@@ -1,0 +1,4 @@
+---
+zookeeper-machines:
+  children:
+    masters:
