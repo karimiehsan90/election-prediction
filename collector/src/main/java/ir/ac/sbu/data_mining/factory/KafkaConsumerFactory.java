@@ -1,13 +1,12 @@
 package ir.ac.sbu.data_mining.factory;
 
-import java.util.Properties;
-import java.util.Collections;
-
+import ir.ac.sbu.data_mining.conf.Conf;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-import ir.ac.sbu.data_mining.conf.Conf;
+import java.util.Collections;
+import java.util.Properties;
 
 public class KafkaConsumerFactory {
 
@@ -21,7 +20,7 @@ public class KafkaConsumerFactory {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, conf.getKafkaAutoOffsetReset());
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList(conf.getKafkaInputTopic()));
+        consumer.subscribe(Collections.singletonList(conf.getKafkaTopic()));
         return consumer;
     }
 }

@@ -1,25 +1,20 @@
 package ir.ac.sbu.data_mining.dao;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.Path;
-
-import ir.ac.sbu.data_mining.conf.Conf;
-import ir.ac.sbu.data_mining.data.TweetHadoopData;
-
 public class HadoopDAO {
-    private Conf conf;
     private Configuration hadoopConf;
     private FileSystem hdfs;
     private PrintWriter writer;
     private Path outFile;
 
-    public HadoopDAO(Conf conf, Configuration hadoopConf, FileSystem hdfs, Path outFile) {
-        this.conf = conf;
+    public HadoopDAO(Configuration hadoopConf, FileSystem hdfs, Path outFile) {
         this.hadoopConf = hadoopConf;
         this.hdfs = hdfs;
         this.outFile = outFile;
@@ -40,12 +35,5 @@ public class HadoopDAO {
         }
         FSDataOutputStream fsAppend = hdfs.append(outFile);
         this.writer = new PrintWriter(fsAppend);
-    }
-
-    public String convertTweetHadoopDataToString(TweetHadoopData tweet) {
-        return tweet.getFavoriteCount() + " " 
-            + tweet.getRetweetCount() + " "
-            + tweet.getEmotion().trim() + " "
-            + tweet.getScreenName() + "\n";
     }
 }

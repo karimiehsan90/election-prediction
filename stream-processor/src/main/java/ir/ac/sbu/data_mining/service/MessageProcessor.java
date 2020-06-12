@@ -1,20 +1,18 @@
 package ir.ac.sbu.data_mining.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ir.ac.sbu.data_mining.conf.Conf;
-import ir.ac.sbu.data_mining.dao.HadoopDAO;
+import ir.ac.sbu.data_mining.dao.MessageProducer;
 import ir.ac.sbu.data_mining.data.TweetHadoopData;
 import ir.ac.sbu.data_mining.entity.Tweet;
 import ir.ac.sbu.data_mining.request.TweetRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class MessageProcessor implements Runnable {
     private Logger logger = LoggerFactory.getLogger("cli");
@@ -23,8 +21,7 @@ public class MessageProcessor implements Runnable {
     private AtomicBoolean closed;
     private ObjectMapper objectMapper;
     private NLPConnector connector;
-    private HadoopDAO hadoopDAO;
-    private BlockingQueue<String> hadoopDatas;
+    private MessageProducer producer;
     private int count = 0;
 
     public MessageProcessor(Conf conf
@@ -32,15 +29,13 @@ public class MessageProcessor implements Runnable {
         , AtomicBoolean closed
         , ObjectMapper objectMapper
         , NLPConnector connector
-        , HadoopDAO hadoopDAO
-        , BlockingQueue<String> hadoopDatas) {
+        , MessageProducer producer) {
         this.conf = conf;
         this.messageQueue = messageQueue;
         this.closed = closed;
         this.objectMapper = objectMapper;
         this.connector = connector;
-        this.hadoopDAO = hadoopDAO;
-        this.hadoopDatas = hadoopDatas;
+        this.producer = producer;
     }
 
     @Override
@@ -65,8 +60,8 @@ public class MessageProcessor implements Runnable {
             TweetRequest request = convertTweetToRequest(tweet);
             String emotion = connector.getEmotion(request);
             TweetHadoopData hadoopData = convertTweetToTweetHadoopData(tweet, emotion);
-            String line = hadoopDAO.convertTweetHadoopDataToString(hadoopData);
-            hadoopDatas.put(line);
+            String line = hadoopData.toString();
+            producer.produce(line);
         } catch (Exception ex) {
             logger.warn("tweet cannot process", ex);
             logger.warn(message);
