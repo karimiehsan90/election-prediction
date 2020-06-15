@@ -12,7 +12,8 @@
     <module>stream-generator</module>
     <module>stream-processor</module>
     <module>reporter</module>
-      <module>collector</module>
+    <module>collector</module>
+    <module>predictor</module>
   </modules>
 
   <properties>
