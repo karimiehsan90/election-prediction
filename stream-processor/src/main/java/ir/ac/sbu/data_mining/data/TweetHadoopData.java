@@ -31,4 +31,12 @@ public class TweetHadoopData {
     public String getScreenName() {
         return this.screenName;
     }
+
+    @Override
+    public String toString() {
+        return this.getFavoriteCount() + " "
+                + this.getRetweetCount() + " "
+                + this.getEmotion().trim() + " "
+                + this.getScreenName() + "\n";
+    }
 }

@@ -8,7 +8,8 @@ import ir.ac.sbu.data_mining.exception.LoadConfigurationException;
 public class Conf {
     private static Conf instance;
     private String kafkaBrokers;
-    private String kafkaTopic;
+    private String kafkaInputTopic;
+    private String kafkaOutputTopic;
     private int queueSize;
     private int threadCount;
     private int maxPollDuration;
@@ -16,7 +17,6 @@ public class Conf {
     private String kafkaConsumerGroupId;
     private String kafkaAutoOffsetReset;
     private String nlpUrl;
-    private String hadoopOutPath;
 
     public static Conf load() throws LoadConfigurationException {
         if (instance == null) {
@@ -29,7 +29,8 @@ public class Conf {
                 Properties properties = new Properties();
                 properties.load(inputStream);
                 instance.kafkaBrokers = properties.getProperty("stream-processor.kafka.brokers");
-                instance.kafkaTopic = properties.getProperty("stream-processor.kafka.topic");
+                instance.kafkaInputTopic = properties.getProperty("stream-processor.kafka.topic.in");
+                instance.kafkaOutputTopic = properties.getProperty("stream-processor.kafka.topic.out");
                 instance.queueSize = Integer.parseInt(properties.getProperty("stream-processor.queue.size"));
                 instance.threadCount = Integer.parseInt(properties.getProperty("stream-processor.thread.count"));
                 instance.maxPollDuration = Integer.parseInt(properties.getProperty("stream-processor.kafka.max.poll.duration"));
@@ -37,15 +38,14 @@ public class Conf {
                 instance.kafkaConsumerGroupId = properties.getProperty("stream-processor.kafka.group.id");
                 instance.kafkaAutoOffsetReset = properties.getProperty("stream-processor.kafka.auto.offset.reset");
                 instance.nlpUrl = properties.getProperty("stream-processor.nlp.url");
-                instance.hadoopOutPath = properties.getProperty("stream-processor.hdfs.out.path");
             } catch (IOException ex) {
                 throw new LoadConfigurationException(ex);
             }
         }
         return instance;
     }
-    public String getKafkaTopic() {
-        return this.kafkaTopic;
+    public String getKafkaInputTopic() {
+        return this.kafkaInputTopic;
     }
 
     public int getMaxPollDuration() {
@@ -80,7 +80,7 @@ public class Conf {
         return this.nlpUrl;
     }
 
-    public String getHadoopOutPath() {
-        return this.hadoopOutPath;
+    public String getKafkaOutputTopic() {
+        return kafkaOutputTopic;
     }
 }

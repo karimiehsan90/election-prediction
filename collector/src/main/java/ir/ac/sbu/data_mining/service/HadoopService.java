@@ -1,13 +1,11 @@
 package ir.ac.sbu.data_mining.service;
 
-import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import ir.ac.sbu.data_mining.dao.HadoopDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ir.ac.sbu.data_mining.dao.HadoopDAO;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HadoopService implements Runnable {
     private Logger logger = LoggerFactory.getLogger("cli");

@@ -95,7 +95,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def test_single():
-    tweet_json = request.data.decode('utf-8')
+    tweet_json = request.data.decode('utf-8', 'replace')
     tweet_dic = json.loads(tweet_json)
     tweet = tweet_dic['text']
     hashtags = ' '.join(tweet_dic['hashtags'])

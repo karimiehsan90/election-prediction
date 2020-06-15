@@ -1,31 +1,30 @@
 package ir.ac.sbu.data_mining.dao;
 
+import ir.ac.sbu.data_mining.conf.Conf;
 import org.apache.kafka.clients.consumer.CommitFailedException;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import ir.ac.sbu.data_mining.conf.Conf;
 
 import java.time.Duration;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class KafkaMessageConsumer implements MessageConsumer, AutoCloseable {
+public class KafkaHadoopDataConsumer implements MessageConsumer, AutoCloseable {
     private Logger logger = LoggerFactory.getLogger("cli");
     private Conf conf;
-    private BlockingQueue<String> messageQueue;
+    private BlockingQueue<String> hadoopDatas;
     private AtomicBoolean closed;
     private KafkaConsumer<String, String> consumer;
 
-    public KafkaMessageConsumer(Conf conf, BlockingQueue<String> messageQueue
+    public KafkaHadoopDataConsumer(Conf conf, BlockingQueue<String> hadoopDatas
         , KafkaConsumer<String, String> consumer
         , AtomicBoolean closed) {
         this.conf = conf;
-        this.messageQueue = messageQueue;
+        this.hadoopDatas = hadoopDatas;
         this.consumer = consumer;
         this.closed = closed;
     }
@@ -40,17 +39,17 @@ public class KafkaMessageConsumer implements MessageConsumer, AutoCloseable {
         ConsumerRecords<String, String> records = consumer
             .poll(Duration.ofMillis(conf.getMaxPollDuration()));
         for (ConsumerRecord<String, String> record : records) {
-            messageQueue.put(record.value());
+            hadoopDatas.put(record.value());
         }
         try {
             if (records.count() > 0) {
                 consumer.commitSync();
             }
         } catch (TimeoutException | CommitFailedException e) {
-            logger.warn("Unable to commit changes for {} consumer", conf.getKafkaInputTopic());
+            logger.warn("Unable to commit changes for {} consumer", conf.getKafkaTopic());
         } catch (org.apache.kafka.common.errors.InterruptException e) {
             logger.warn("Unable to commit changes for {} consumer because of interruption"
-                , conf.getKafkaInputTopic());
+                , conf.getKafkaTopic());
             Thread.currentThread().interrupt();
         }
     }

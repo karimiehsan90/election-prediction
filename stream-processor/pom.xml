@@ -58,12 +58,6 @@
 	    <artifactId>httpclient</artifactId>
 	    <version>${apache.http.client.version}</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-client</artifactId>
-      <version>${hadoop.version}</version>
-    </dependency>
   </dependencies>
 
   <build>

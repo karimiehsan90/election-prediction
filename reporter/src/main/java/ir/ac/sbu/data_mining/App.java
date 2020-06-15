@@ -23,7 +23,7 @@ public class App {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         job.setJar("reporter.jar");
-        FileInputFormat.addInputPath(job, new Path("/election-prediction/stream-processor"));
+        FileInputFormat.addInputPath(job, new Path("/election-prediction/collector"));
         FileOutputFormat.setOutputPath(job, new Path("/election-prediction/reporter"));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
