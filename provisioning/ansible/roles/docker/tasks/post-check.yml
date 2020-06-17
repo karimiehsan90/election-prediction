@@ -1,0 +1,7 @@
+---
+- name: Ensure can pull sample image
+  become: true
+  docker_image:
+    name: "{{ docker_sample_image_post_check }}"
+    state: present
+    source: pull

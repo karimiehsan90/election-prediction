@@ -1,0 +1,6 @@
+---
+- name: Check required variables
+  assert:
+    that:
+     - docker_insecure_registries | list
+     - docker_sample_image_post_check | mandatory

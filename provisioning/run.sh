@@ -3,4 +3,5 @@
 set -o errexit
 
 inventory="${1:local}"
-ansible-playbook playbook.yml -i "inventories/${inventory}/"
+playbook="${2:main}"
+ansible-playbook "playbooks/${playbook}.yml" -i "inventories/${inventory}/"

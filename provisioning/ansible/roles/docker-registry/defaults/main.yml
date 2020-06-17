@@ -1,0 +1,4 @@
+---
+docker_registry_port:
+docker_registry_container_name:
+docker_registry_data_dir:

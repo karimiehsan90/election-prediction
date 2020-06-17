@@ -1,0 +1,10 @@
+---
+- import_playbook: infra/prepare.yml
+
+- import_playbook: infra/docker.yml
+
+- import_playbook: infra/zookeeper.yml
+
+- import_playbook: infra/kafka.yml
+
+- import_playbook: infra/hadoop.yml

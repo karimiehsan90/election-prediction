@@ -1,0 +1,4 @@
+---
+- hosts: hadoop-machines
+  roles:
+    - hadoop
