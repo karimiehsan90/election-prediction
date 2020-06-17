@@ -4,3 +4,14 @@ all:
     etc_hosts: "{{ groups['all'] }}"
     etc_hosts_root_dns:
       - 8.8.8.8
+
+    docker_registry_port: 5000
+    docker_repository: http://main:8080
+    docker_insecure_registries:
+      - "{{ groups['docker-registry'] | first }}:{{ docker_registry_port }}"
+    docker_sample_image_post_check: m.docker-registry.ir/alpine
+
+docker-registry:
+  vars:
+    docker_registry_container_name: registry
+    docker_registry_data_dir: /var/lib/registry

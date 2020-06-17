@@ -1,0 +1,11 @@
+---
+- import_tasks: check.yml
+
+- import_tasks: install.yml
+
+- import_tasks: config.yml
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- import_tasks: post-check.yml

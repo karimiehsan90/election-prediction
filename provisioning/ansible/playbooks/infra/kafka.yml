@@ -1,0 +1,4 @@
+---
+- hosts: kafka-machines
+  roles:
+    - role: kafka

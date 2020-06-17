@@ -1,0 +1,13 @@
+---
+- name: Ensure docker installed
+  become: true
+  apt:
+    deb: "{{ docker_repository }}/{{ item }}"
+    state: present
+  loop: "{{ docker_deb_files }}"
+
+- name: Ensure docker python module installed
+  become: true
+  pip:
+    name: docker
+    state: present

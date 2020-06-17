@@ -1,0 +1,4 @@
+---
+- hosts: zookeeper-machines
+  roles:
+    - role: zookeeper

@@ -1,0 +1,10 @@
+- name: Ensure registry container is running
+  become: true
+  docker_container:
+    name: "{{ docker_registry_container_name }}"
+    image: "{{ docker_registry_image }}"
+    ports:
+     - "{{ docker_registry_port }}:5000"
+    volumes:
+     - "{{ docker_registry_data_dir }}:/var/lib/registry"
+    state: started

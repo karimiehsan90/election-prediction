@@ -1,0 +1,4 @@
+---
+docker_repository:
+docker_insecure_registries: []
+docker_sample_image_post_check:

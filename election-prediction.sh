@@ -11,11 +11,13 @@ build() {
 
 run-playbook() {
   inventory="$1"
+  playbook="$2"
   docker run -it \
     --net host \
     --rm \
     election-prediction/provisioning \
-    "${inventory}"
+    "${inventory}" \
+    "${playbook}"
 }
 
 run-project() {

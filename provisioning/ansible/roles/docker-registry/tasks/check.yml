@@ -1,0 +1,7 @@
+---
+- name: Check required variables
+  assert:
+    that:
+     - docker_registry_port | int
+     - docker_registry_container_name | mandatory
+     - docker_registry_data_dir | mandatory
