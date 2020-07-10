@@ -1,0 +1,6 @@
+---
+- name: Wait for {{ redis_port }}
+  wait_for:
+    host: "{{ redis_bind_ip }}"
+    port: "{{ redis_port }}"
+    timeout: 30

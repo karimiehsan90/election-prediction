@@ -1,6 +1,8 @@
 ---
 - import_playbook: infra/prepare.yml
 
+- import_playbook: infra/redis.yml
+
 - import_playbook: infra/docker.yml
 
 - import_playbook: infra/zookeeper.yml
