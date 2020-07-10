@@ -1,0 +1,5 @@
+---
+redis_deb_files:
+  - libjemalloc1_3.6.0-9ubuntu1_amd64.deb
+  - "redis-tools-{{ redis_version }}ubuntu_amd64.deb"
+  - "redis-server-{{ redis_version }}ubuntu_amd64.deb"

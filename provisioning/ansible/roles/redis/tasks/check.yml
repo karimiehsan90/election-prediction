@@ -1,0 +1,6 @@
+---
+- name: Check required variables
+  assert:
+    that:
+     - redis_port | int
+     - redis_repository_url | mandatory

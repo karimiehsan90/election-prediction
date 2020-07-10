@@ -1,0 +1,7 @@
+---
+- name: Ensure redis installed
+  become: true
+  apt:
+    deb: "{{ redis_repository_url }}/{{ item }}"
+    state: present
+  loop: "{{ redis_deb_files }}"

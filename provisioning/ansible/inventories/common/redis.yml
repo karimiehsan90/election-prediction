@@ -1,0 +1,5 @@
+---
+redis:
+  vars:
+    redis_port: 6379
+    redis_repository_url: http://main:8080

@@ -1,0 +1,14 @@
+---
+- name: Ensure bind ip and port is set
+  become: true
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  loop:
+    - regexp: "^bind "
+      line: "bind {{ redis_bind_ip }}"
+    - regexp: "^port "
+      line: "port {{ redis_port }}"
+  notify: Restart redis server
