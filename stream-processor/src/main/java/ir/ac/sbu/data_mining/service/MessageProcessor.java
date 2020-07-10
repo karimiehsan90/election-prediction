@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.ac.sbu.data_mining.conf.Conf;
 import ir.ac.sbu.data_mining.dao.MessageProducer;
 import ir.ac.sbu.data_mining.data.TweetHadoopData;
+import ir.ac.sbu.data_mining.entity.Hashtag;
 import ir.ac.sbu.data_mining.entity.Tweet;
 import ir.ac.sbu.data_mining.request.TweetRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -25,11 +27,11 @@ public class MessageProcessor implements Runnable {
     private int count = 0;
 
     public MessageProcessor(Conf conf
-        , BlockingQueue<String> messageQueue
-        , AtomicBoolean closed
-        , ObjectMapper objectMapper
-        , NLPConnector connector
-        , MessageProducer producer) {
+            , BlockingQueue<String> messageQueue
+            , AtomicBoolean closed
+            , ObjectMapper objectMapper
+            , NLPConnector connector
+            , MessageProducer producer) {
         this.conf = conf;
         this.messageQueue = messageQueue;
         this.closed = closed;
@@ -70,19 +72,22 @@ public class MessageProcessor implements Runnable {
 
     private TweetHadoopData convertTweetToTweetHadoopData(Tweet tweet, String emotion) {
         return new TweetHadoopData(tweet.getFavoriteCount()
-            , tweet.getRetweetCount()
-            , emotion
-            , tweet.getScreenName());
+                , tweet.getRetweetCount()
+                , emotion
+                , tweet.getScreenName());
     }
 
     private TweetRequest convertTweetToRequest(Tweet tweet) {
-        List<String> hashtags = tweet.getEntities().getHashtags().stream()
-            .map(h -> h.getText()).collect(Collectors.toList());
+        List<String> hashtags = new ArrayList<>();
+        if (tweet.getEntities() != null) {
+            hashtags = tweet.getEntities().getHashtags().stream()
+                    .map(Hashtag::getText).collect(Collectors.toList());
+        }
         if (tweet.getExtendedEntities() != null
-            && tweet.getExtendedEntities().getHashtags() != null) {
+                && tweet.getExtendedEntities().getHashtags() != null) {
             hashtags.addAll(
-                tweet.getExtendedEntities().getHashtags().stream()
-                    .map(h -> h.getText()).collect(Collectors.toList())
+                    tweet.getExtendedEntities().getHashtags().stream()
+                            .map(Hashtag::getText).collect(Collectors.toList())
             );
         }
         int favoriteCount = tweet.getFavoriteCount();
