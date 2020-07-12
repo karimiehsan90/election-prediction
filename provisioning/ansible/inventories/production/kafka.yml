@@ -1,0 +1,4 @@
+---
+kafka-machines:
+  children:
+    project-machines:
