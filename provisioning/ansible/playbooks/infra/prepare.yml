@@ -2,6 +2,7 @@
 - hosts: project-machines
   roles:
     - etc-hosts
+    - iptables
     - jdk
   tasks:
     - name: Install python and pip
