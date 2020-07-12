@@ -11,6 +11,10 @@ all:
       - "{{ groups['docker-registry'] | first }}:{{ docker_registry_port }}"
     docker_sample_image_post_check: m.docker-registry.ir/alpine
 
+    iptables_allowed_hosts: "{{ groups['all'] }}"
+    iptables_allowed_ports:
+      - 22
+
 docker-registry:
   vars:
     docker_registry_container_name: registry

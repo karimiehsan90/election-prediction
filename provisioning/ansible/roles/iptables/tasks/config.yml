@@ -1,0 +1,60 @@
+---
+- name: Ensure default rule does not exists
+  become: true
+  iptables:
+    chain: INPUT
+    destination: anywhere
+    jump: ACCEPT
+    protocol: all
+    source: anywhere
+    state: absent
+
+- name: Ensure loopback has access to host
+  become: true
+  iptables:
+    chain: INPUT
+    in_interface: loopback
+    jump: ACCEPT
+    state: present
+
+- name: Ensure allowed hosts has access to host
+  become: true
+  iptables:
+    chain: INPUT
+    source: "{{ hostvars[item].ansible_host }}"
+    jump: ACCEPT
+    state: present
+  loop: "{{ iptables_allowed_hosts }}"
+
+- name: Ensure allowed ports are available from network
+  become: true
+  iptables:
+    chain: INPUT
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+    protocol: tcp
+    state: present
+  loop: "{{ iptables_allowed_ports }}"
+
+- name: Ensure ack can receive
+  become: true
+  iptables:
+    chain: INPUT
+    match: conntrack
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+    state: present
+
+- name: Ensure policy of output is ACCEPT
+  become: true
+  iptables:
+    chain: OUTPUT
+    policy: ACCEPT
+    state: present
+
+- name: Ensure policy of input is DROP
+  become: true
+  iptables:
+    chain: INPUT
+    policy: DROP
+    state: present
