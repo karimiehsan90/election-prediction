@@ -2,3 +2,8 @@ project-machines:
   vars:
     ansible_ssh_pass: vagrant
     ansible_sudo_pass: vagrant
+
+    crawler_twitter_consumer_key: no need to install in local
+    crawler_twitter_consumer_secret: no need to install in local
+    crawler_twitter_access_token: no need to install in local
+    crawler_twitter_access_token_secret: no need to install in local

@@ -1,0 +1,7 @@
+crawler.kafka.topic.tweets={{ kafka_tweets_topic }}
+crawler.kafka.brokers={{ inventory_hostname }}:{{ kafka_port }}
+crawler.redis.host={{ groups['redis'] | first }}
+crawler.redis.port={{ redis_port }}
+crawler.candidate={{ crawler_search_tags }}
+crawler.request.interval={{ crawler_request_interval }}
+crawler.server.port={{ crawler_server_port }}

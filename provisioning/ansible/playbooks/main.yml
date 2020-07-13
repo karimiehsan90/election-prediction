@@ -1,2 +1,4 @@
 ---
 - import_playbook: infra.yml
+
+- import_playbook: app.yml
