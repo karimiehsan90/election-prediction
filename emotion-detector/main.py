@@ -5,7 +5,7 @@ import numpy as np
 import os
 import json
 
-dataset_base_dir = os.getenv('NLP_DATASET_BASEDIR', '/home/ehsan/datasets/emotion')
+dataset_base_dir = os.getenv('NLP_DATASET_BASEDIR', '/emotion')
 bind_ip = os.getenv('NLP_BIND_IP', '0.0.0.0')
 port = int(os.getenv('NLP_PORT', '8000'))
 training_contents = []

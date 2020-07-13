@@ -2,11 +2,29 @@
 
 set -o errexit
 
+source election-prediction-env.sh
+
 build() {
-  docker build \
-    -t election-prediction/provisioning \
-    -f provisioning/Dockerfile \
-    provisioning
+  mvn clean package -DskipTests
+  for module in "${OTHER_LANGUAGES_MODULES[@]}"; do
+    docker build \
+      --network host \
+      -t "election-prediction/${module}" \
+      -f "${module}/Dockerfile" \
+      "${module}"
+  done
+  for module in "${DOCKERIZE_JAVA_MODULES[@]}"; do
+    docker build \
+      -t "election-prediction/${module}" \
+      -f "${module}/target/${module}/Dockerfile" \
+      "${module}/target/${module}"
+  done
+}
+
+push() {
+  registry="${1}"
+  docker tag election-prediction/crawler "${registry}/election-prediction/crawler"
+  docker push "${registry}/election-prediction/crawler"
 }
 
 run-playbook() {
