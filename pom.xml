@@ -14,6 +14,7 @@
     <module>reporter</module>
     <module>collector</module>
     <module>predictor</module>
+      <module>crawler</module>
   </modules>
 
   <properties>
