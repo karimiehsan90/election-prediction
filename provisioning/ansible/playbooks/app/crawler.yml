@@ -1,0 +1,12 @@
+---
+- hosts: crawler
+  tasks:
+    - name: Start crawler
+      become: true
+      docker_container:
+        name: crawler
+        network_mode: host
+        volumes:
+          - /etc/election-prediction:/opt/election-prediction/conf
+        image: "{{ crawler_docker_image }}"
+        state: started

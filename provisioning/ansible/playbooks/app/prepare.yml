@@ -1,0 +1,22 @@
+---
+- hosts: project-machines
+  tasks:
+    - name: Ensure config directory exists
+      become: true
+      file:
+        path: "{{ project_config_dir }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Copy configuration files
+      become: true
+      template:
+        src: "{{ item }}.j2"
+        dest: "{{ project_config_dir }}/{{ item }}"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+      loop:
+        - crawler.properties
+        - twitter4j.properties
+        - log4j.properties
