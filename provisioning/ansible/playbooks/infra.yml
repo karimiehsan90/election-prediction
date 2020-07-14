@@ -10,3 +10,5 @@
 - import_playbook: infra/kafka.yml
 
 - import_playbook: infra/hadoop.yml
+
+- import_playbook: infra/prometheus.yml

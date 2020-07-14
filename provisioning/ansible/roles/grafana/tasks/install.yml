@@ -1,0 +1,12 @@
+---
+- name: Ensure grafana installed
+  become: true
+  apt:
+    deb: "{{ grafana_deb_url }}"
+    state: present
+
+- name: Start grafana
+  become: true
+  service:
+    name: grafana-server
+    state: started

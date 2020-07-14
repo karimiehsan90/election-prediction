@@ -1,0 +1,6 @@
+---
+- name: Check required variables
+  assert:
+    that:
+      - grafana_version | mandatory
+      - grafana_repository_url | mandatory

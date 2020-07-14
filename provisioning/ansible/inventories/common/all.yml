@@ -14,6 +14,7 @@ all:
     iptables_allowed_hosts: "{{ groups['all'] }}"
     iptables_allowed_ports:
       - 22
+      - 3000
 
     kafka_tweets_topic: tweets
     kafka_hadoop_data_topic: hadoop-data-tweets
