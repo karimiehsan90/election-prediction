@@ -13,3 +13,15 @@ crawler:
 
     crawler_first_candidate_tags: Joe_Biden,JoeBiden,JoeBiden2020,JoeBidenForPresident2020,Biden2020,President_biden
     crawler_second_candidate_tags: Donald_Trump,DonaldTrump,DonaldTrump2020,DonaldTrumpForPresident2020,Trump2020,President_trump
+
+stream-processor:
+  vars:
+    stream_processor_group_id: sp
+    stream_processor_queue_size: 2000
+    stream_processor_thread_count: 10
+    stream_processor_nlp_url: http://{{ inventory_hostname }}:{{ nlp_port }}/
+    stream_processor_server_port: 8002
+    stream_processor_image: "{{ docker_registry }}/election-prediction/stream-processor"
+
+    nlp_port: 8003
+    nlp_image: "{{ docker_registry }}/election-prediction/emotion-detector"

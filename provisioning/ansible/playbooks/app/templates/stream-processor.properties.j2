@@ -1,0 +1,11 @@
+stream-processor.kafka.brokers={{ inventory_hostname }}:{{ kafka_port }}
+stream-processor.kafka.topic.in={{ kafka_tweets_topic }}
+stream-processor.kafka.topic.out={{ kafka_hadoop_data_topic }}
+stream-processor.kafka.max.poll.duration={{ kafka_max_poll_duration }}
+stream-processor.kafka.max.poll.records={{ kafka_max_poll_records }}
+stream-processor.kafka.group.id={{ stream_processor_group_id }}
+stream-processor.kafka.auto.offset.reset=earliest
+stream-processor.queue.size={{ stream_processor_queue_size }}
+stream-processor.thread.count={{ stream_processor_thread_count }}
+stream-processor.nlp.url={{ stream_processor_nlp_url }}
+stream-processor.server.port={{ stream_processor_server_port }}

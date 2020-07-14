@@ -20,6 +20,7 @@
         <kafka.version>2.3.0</kafka.version>
         <jackson.version>2.10.3</jackson.version>
         <jedis.version>2.9.0</jedis.version>
+        <sparkjava.version>2.8.0</sparkjava.version>
     </properties>
 
     <dependencies>
@@ -69,7 +70,7 @@
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>2.8.0</version>
+            <version>${sparkjava.version}</version>
         </dependency>
     </dependencies>
 

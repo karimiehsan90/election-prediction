@@ -5,3 +5,8 @@ crawler:
       crawler_search_tags: "{{ crawler_first_candidate_tags }}"
     slave:
       crawler_search_tags: "{{ crawler_second_candidate_tags }}"
+
+stream-processor:
+  hosts:
+    master:
+    slave:
