@@ -1,0 +1,6 @@
+[Service]
+ExecStart={{ prometheus_path }}/prometheus \
+    --config.file {{ prometheus_path }}/prometheus.yml \
+    --storage.tsdb.path {{ prometheus_tsdb_path }}
+User={{ prometheus_user }}
+Group={{ prometheus_group }}

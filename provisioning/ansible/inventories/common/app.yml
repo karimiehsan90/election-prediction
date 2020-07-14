@@ -3,11 +3,13 @@ project-machines:
   vars:
     project_config_dir: /etc/election-prediction
     docker_registry: "{{ groups['docker-registry'] | first }}:{{ docker_registry_port }}"
+    crawler_server_port: 8001
+    stream_processor_server_port: 8002
+    collector_server_port: 8004
 
 crawler:
   vars:
     crawler_request_interval: 10000
-    crawler_server_port: 8001
     crawler_twitter_debug: false
     crawler_docker_image: "{{ docker_registry }}/election-prediction/crawler"
 
@@ -20,7 +22,6 @@ stream-processor:
     stream_processor_queue_size: 2000
     stream_processor_thread_count: 10
     stream_processor_nlp_url: http://{{ inventory_hostname }}:{{ nlp_port }}/
-    stream_processor_server_port: 8002
     stream_processor_image: "{{ docker_registry }}/election-prediction/stream-processor"
 
     nlp_port: 8003

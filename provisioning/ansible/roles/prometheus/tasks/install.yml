@@ -1,0 +1,68 @@
+---
+- name: Ensure {{ prometheus_group }} group exists
+  become: true
+  group:
+    name: "{{ prometheus_group }}"
+    state: present
+
+- name: Ensure {{ prometheus_user }} user exists
+  become: true
+  user:
+    name: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    state: present
+    shell: /bin/bash
+
+- name: Download prometheus tarball
+  become: true
+  get_url:
+    url: "{{ prometheus_tarball_url }}"
+    dest: "{{ prometheus_dir_dest }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+  notify: Restart prometheus
+
+- name: Unarchieve prometheus tarball
+  become: true
+  unarchive:
+    src: "{{ prometheus_dir_dest }}/{{ prometheus_tarball_name }}"
+    dest: "{{ prometheus_dir_dest }}"
+    creates: "{{ prometheus_dir_dest }}/{{ prometheus_dir_name }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    remote_src: true
+  notify: Restart prometheus
+
+- name: Ensure symlink exists
+  become: true
+  file:
+    src: "{{ prometheus_dir_dest }}/{{ prometheus_dir_name }}"
+    dest: "{{ prometheus_path }}"
+    state: link
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+
+- name: Ensure prometheus tsdb exists
+  become: true
+  file:
+    path: "{{ prometheus_tsdb_path }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+
+- name: Copy service file
+  become: true
+  template:
+    src: prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+    owner: root
+    group: root
+  notify: Restart prometheus
+
+- name: Start prometheus service
+  become: true
+  service:
+    name: prometheus
+    daemon_reload: true
+    state: started
+  notify: Restart prometheus

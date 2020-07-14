@@ -1,0 +1,6 @@
+---
+- name: Check required variables
+  assert:
+    that:
+      - prometheus_version | mandatory
+      - prometheus_repository_url | mandatory

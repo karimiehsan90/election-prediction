@@ -10,3 +10,7 @@ stream-processor:
   hosts:
     master:
     slave:
+
+collector:
+  hosts:
+    master:

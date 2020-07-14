@@ -3,10 +3,14 @@ crawler:
   hosts:
     master:
       crawler_search_tags: "{{ crawler_first_candidate_tags }}"
-    slave:
+    slave-1:
       crawler_search_tags: "{{ crawler_second_candidate_tags }}"
 
 stream-processor:
   hosts:
     master:
     slave-1:
+
+collector:
+  hosts:
+    master:

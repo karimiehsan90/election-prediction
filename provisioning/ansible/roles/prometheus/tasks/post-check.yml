@@ -1,0 +1,6 @@
+---
+- name: Wait for 9090
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: 9090
+    timeout: 30

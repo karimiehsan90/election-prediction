@@ -1,0 +1,5 @@
+---
+grafana_version:
+grafana_repository_url:
+grafana_deb_name: "grafana_{{ grafana_version }}_amd64.deb"
+grafana_deb_url: "{{ grafana_repository_url }}/{{ grafana_deb_name }}"

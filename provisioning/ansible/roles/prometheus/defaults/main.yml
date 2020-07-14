@@ -1,0 +1,13 @@
+---
+prometheus_version:
+prometheus_repository_url:
+prometheus_dir_name: "prometheus-{{ prometheus_version }}.linux-amd64"
+prometheus_tarball_name: "{{ prometheus_dir_name }}.tar.gz"
+prometheus_tarball_url: "{{ prometheus_repository_url }}/{{ prometheus_tarball_name }}"
+prometheus_tsdb_path:
+prometheus_dir_dest:
+prometheus_path:
+prometheus_port:
+prometheus_user:
+prometheus_group:
+prometheus_jobs: []

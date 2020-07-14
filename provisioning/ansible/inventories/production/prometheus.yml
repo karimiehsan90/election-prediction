@@ -1,0 +1,4 @@
+---
+monitoring:
+  hosts:
+    master:

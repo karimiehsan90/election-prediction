@@ -1,0 +1,24 @@
+---
+monitoring:
+  vars:
+    prometheus_version: 2.19.2
+    prometheus_repository_url: http://main:8080
+    prometheus_tsdb_path: /var/lib/prometheus
+    prometheus_dir_dest: /opt
+    prometheus_path: /opt/prometheus
+    prometheus_port: 9090
+    prometheus_user: prometheus
+    prometheus_group: prometheus
+    prometheus_jobs:
+      - job_name: crawler
+        port: "{{ crawler_server_port }}"
+        hosts: "{{ groups['crawler'] }}"
+      - job_name: stream-processor
+        port: "{{ stream_processor_server_port }}"
+        hosts: "{{ groups['stream-processor'] }}"
+      - job_name: collector
+        port: "{{ collector_server_port }}"
+        hosts: "{{ groups['collector'] }}"
+
+    grafana_version: 7.0.6
+    grafana_repository_url: http://main:8080
