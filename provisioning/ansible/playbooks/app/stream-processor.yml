@@ -1,0 +1,30 @@
+---
+- hosts: stream-processor
+  tasks:
+    - name: Start nlp
+      become: true
+      docker_container:
+        name: nlp
+        env:
+          NLP_PORT: "{{ nlp_port | string }}"
+        network_mode: host
+        image: "{{ nlp_image }}"
+        state: started
+
+    - name: Ensure nlp is up
+      wait_for:
+        port: "{{ nlp_port }}"
+        host: "{{ inventory_hostname }}"
+        timeout: 30
+
+    - name: Start stream processor
+      become: true
+      docker_container:
+        name: stream-processor
+        network_mode: host
+        volumes:
+          - /etc/election-prediction:/opt/election-prediction/conf
+        image: "{{ stream_processor_image }}"
+        state: started
+  vars:
+    ansible_python_interpreter: /usr/bin/python3

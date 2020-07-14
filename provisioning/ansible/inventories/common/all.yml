@@ -16,6 +16,9 @@ all:
       - 22
 
     kafka_tweets_topic: tweets
+    kafka_hadoop_data_topic: hadoop-data-tweets
+    kafka_max_poll_duration: 2000
+    kafka_max_poll_records: 10
 
 docker-registry:
   vars:

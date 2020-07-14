@@ -3,6 +3,7 @@ package ir.ac.sbu.data_mining;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import ir.ac.sbu.data_mining.conf.Conf;
+import ir.ac.sbu.data_mining.controller.MetricsController;
 import ir.ac.sbu.data_mining.dao.KafkaMessageProducer;
 import ir.ac.sbu.data_mining.dao.MessageProducer;
 import ir.ac.sbu.data_mining.factory.KafkaConsumerFactory;
@@ -11,6 +12,7 @@ import ir.ac.sbu.data_mining.factory.RunnableFactory;
 import ir.ac.sbu.data_mining.service.NLPConnector;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
+import spark.Spark;
 
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -23,6 +25,7 @@ public class App {
         KafkaConsumer<String, String> kafkaConsumer = KafkaConsumerFactory.createKafkaConsumer(conf);
         KafkaProducer<String, String> kafkaProducer = KafkaProducerFactory.createKafkaProducer(conf);
         MessageProducer producer = new KafkaMessageProducer(conf, kafkaProducer);
+        MetricsController controller = new MetricsController();
         BlockingQueue<String> messageQueue = new ArrayBlockingQueue<>(conf.getQueueSize());
         AtomicBoolean closed = new AtomicBoolean(false);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -40,5 +43,13 @@ public class App {
             Thread thread = new Thread(runnable);
             thread.start();
         }
+
+        Spark.port(conf.getServerPort());
+
+        Spark.get("/metrics", (request, response) -> controller.process(producer));
+        Spark.after("/*", (request, response) -> {
+            response.header("Content-Type", "text/plain");
+            controller.increaseRequestCount();
+        });
     }
 }

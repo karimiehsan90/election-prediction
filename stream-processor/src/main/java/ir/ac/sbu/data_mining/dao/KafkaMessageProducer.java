@@ -1,5 +1,6 @@
 package ir.ac.sbu.data_mining.dao;
 
+import ir.ac.sbu.data_mining.annotation.PrometheusMetric;
 import ir.ac.sbu.data_mining.conf.Conf;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -14,7 +15,8 @@ public class KafkaMessageProducer implements MessageProducer {
     private Conf conf;
     private KafkaProducer<String, String> kafkaProducer;
     private Logger logger = LoggerFactory.getLogger("cli");
-    AtomicInteger sentCount = new AtomicInteger(0);
+    @PrometheusMetric(metricName = "stream_processor_proceed_count")
+    private AtomicInteger sentCount = new AtomicInteger(0);
 
     public KafkaMessageProducer(Conf conf, KafkaProducer<String, String> kafkaProducer) {
         this.conf = conf;

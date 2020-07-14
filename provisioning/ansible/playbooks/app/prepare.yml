@@ -20,3 +20,4 @@
         - crawler.properties
         - twitter4j.properties
         - log4j.properties
+        - stream-processor.properties

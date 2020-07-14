@@ -3,6 +3,7 @@ package ir.ac.sbu.data_mining.conf;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
+
 import ir.ac.sbu.data_mining.exception.LoadConfigurationException;
 
 public class Conf {
@@ -17,15 +18,16 @@ public class Conf {
     private String kafkaConsumerGroupId;
     private String kafkaAutoOffsetReset;
     private String nlpUrl;
+    private int serverPort;
 
     public static Conf load() throws LoadConfigurationException {
         if (instance == null) {
             try {
                 instance = new Conf();
                 InputStream inputStream = Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResourceAsStream("stream-processor.properties");
+                        .currentThread()
+                        .getContextClassLoader()
+                        .getResourceAsStream("stream-processor.properties");
                 Properties properties = new Properties();
                 properties.load(inputStream);
                 instance.kafkaBrokers = properties.getProperty("stream-processor.kafka.brokers");
@@ -38,12 +40,14 @@ public class Conf {
                 instance.kafkaConsumerGroupId = properties.getProperty("stream-processor.kafka.group.id");
                 instance.kafkaAutoOffsetReset = properties.getProperty("stream-processor.kafka.auto.offset.reset");
                 instance.nlpUrl = properties.getProperty("stream-processor.nlp.url");
+                instance.serverPort = Integer.parseInt(properties.getProperty("stream-processor.server.port"));
             } catch (IOException ex) {
                 throw new LoadConfigurationException(ex);
             }
         }
         return instance;
     }
+
     public String getKafkaInputTopic() {
         return this.kafkaInputTopic;
     }
@@ -78,6 +82,10 @@ public class Conf {
 
     public String getNlpUrl() {
         return this.nlpUrl;
+    }
+
+    public int getServerPort() {
+        return serverPort;
     }
 
     public String getKafkaOutputTopic() {
