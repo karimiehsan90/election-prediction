@@ -1,5 +1,6 @@
 package ir.ac.sbu.data_mining.service;
 
+import ir.ac.sbu.data_mining.annotations.PrometheusMetric;
 import ir.ac.sbu.data_mining.dao.HadoopDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ public class HadoopService implements Runnable {
     private BlockingQueue<String> hadoopDatas;
     private AtomicBoolean closed;
     private HadoopDAO hadoopDAO;
+    @PrometheusMetric(metricName = "collector_saved_count")
     private int count = 0;
 
     public HadoopService(BlockingQueue<String> hadoopDatas, AtomicBoolean closed, HadoopDAO hadoopDAO) {

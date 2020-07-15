@@ -6,6 +6,10 @@ project-machines:
     crawler_server_port: 8001
     stream_processor_server_port: 8002
     collector_server_port: 8004
+    collector_group_id: col
+    collector_queue_size: 2000
+    collector_hdfs_output_dir: /election-prediction/collector
+    collector_hdfs_output_file: "{{ collector_hdfs_output_dir }}/out"
 
 crawler:
   vars:
@@ -26,3 +30,9 @@ stream-processor:
 
     nlp_port: 8003
     nlp_image: "{{ docker_registry }}/election-prediction/emotion-detector"
+
+collector:
+  vars:
+    collector_tarball_url: "http://main:8080/collector.tar"
+    collector_dest: /opt
+    collector_path: "{{ collector_dest }}/collector"
