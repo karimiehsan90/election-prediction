@@ -4,3 +4,5 @@
 - import_playbook: app/crawler.yml
 
 - import_playbook: app/stream-processor.yml
+
+- import_playbook: app/collector.yml

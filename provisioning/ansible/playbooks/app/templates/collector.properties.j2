@@ -1,0 +1,9 @@
+collector.kafka.brokers={{ inventory_hostname }}:{{ kafka_port }}
+collector.kafka.topic={{ kafka_hadoop_data_topic }}
+collector.kafka.max.poll.duration={{ kafka_max_poll_duration }}
+collector.kafka.max.poll.records={{ kafka_max_poll_records }}
+collector.kafka.group.id={{ collector_group_id }}
+collector.kafka.auto.offset.reset=earliest
+collector.queue.size={{ collector_queue_size }}
+collector.hdfs.out.path={{ collector_hdfs_output_file }}
+collector.server.port={{ collector_server_port }}

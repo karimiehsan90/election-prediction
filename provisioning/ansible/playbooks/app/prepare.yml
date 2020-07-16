@@ -21,3 +21,6 @@
         - twitter4j.properties
         - log4j.properties
         - stream-processor.properties
+        - collector.properties
+        - core-site.xml
+        - hdfs-site.xml

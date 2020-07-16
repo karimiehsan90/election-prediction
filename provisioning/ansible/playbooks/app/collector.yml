@@ -1,0 +1,55 @@
+---
+- hosts: collector
+  tasks:
+    - name: Download collector tarball
+      become: true
+      get_url:
+        url: "{{ collector_tarball_url }}"
+        dest: "{{ collector_dest }}"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Unarchive collector tarball
+      become: true
+      unarchive:
+        src: "{{ collector_dest }}/collector.tar"
+        dest: "{{ collector_dest }}"
+        creates: "{{ collector_path }}"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        remote_src: true
+
+    - name: Ensure conf directory does not exists
+      become: true
+      file:
+        path: "{{ collector_path }}/conf"
+        state: absent
+
+    - name: Create symlink for conf
+      become: true
+      file:
+        src: "{{ project_config_dir }}"
+        dest: "{{ collector_path }}/conf"
+        state: link
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Ensure start script can execute
+      file:
+        path: "{{ collector_path }}/bin/start-collector.sh"
+        state: file
+        mode: 0755
+
+    - name: Ensure system file exists
+      become: true
+      template:
+        src: collector.service.j2
+        dest: /etc/systemd/system/collector.service
+        owner: root
+        group: root
+
+    - name: Start collector
+      become: true
+      service:
+        name: collector
+        state: started

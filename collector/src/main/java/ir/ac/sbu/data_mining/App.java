@@ -1,6 +1,7 @@
 package ir.ac.sbu.data_mining;
 
 import ir.ac.sbu.data_mining.conf.Conf;
+import ir.ac.sbu.data_mining.controller.MetricsController;
 import ir.ac.sbu.data_mining.dao.HadoopDAO;
 import ir.ac.sbu.data_mining.dao.KafkaHadoopDataConsumer;
 import ir.ac.sbu.data_mining.dao.MessageConsumer;
@@ -11,6 +12,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import spark.Spark;
 
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -33,5 +35,10 @@ public class App {
         Thread consumerThread = new Thread(consumer);
         consumerThread.start();
         hadoopServiceThread.start();
+        MetricsController controller = new MetricsController();
+        Spark.port(conf.getServerPort());
+        Spark.get("/metrics", (request, response) -> controller.process(service));
+        Spark.after("/*", (request, response) ->
+            response.header("Content-Type", "text/plain"));
     }
 }

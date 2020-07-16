@@ -16,6 +16,7 @@ public class Conf {
     private String kafkaConsumerGroupId;
     private String kafkaAutoOffsetReset;
     private String hadoopOutPath;
+    private int serverPort;
 
     public static Conf load() throws LoadConfigurationException {
         if (instance == null) {
@@ -35,6 +36,7 @@ public class Conf {
                 instance.kafkaConsumerGroupId = properties.getProperty("collector.kafka.group.id");
                 instance.kafkaAutoOffsetReset = properties.getProperty("collector.kafka.auto.offset.reset");
                 instance.hadoopOutPath = properties.getProperty("collector.hdfs.out.path");
+                instance.serverPort = Integer.parseInt(properties.getProperty("collector.server.port"));
             } catch (IOException ex) {
                 throw new LoadConfigurationException(ex);
             }
@@ -71,5 +73,9 @@ public class Conf {
 
     public String getHadoopOutPath() {
         return this.hadoopOutPath;
+    }
+
+    public int getServerPort() {
+        return serverPort;
     }
 }
