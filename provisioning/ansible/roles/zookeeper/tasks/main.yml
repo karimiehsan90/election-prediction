@@ -17,4 +17,5 @@
 - name: Validate zookeeper is up
   wait_for:
     port: "{{ zookeeper_client_port }}"
+    host: "{{ inventory_hostname }}"
     timeout: 30

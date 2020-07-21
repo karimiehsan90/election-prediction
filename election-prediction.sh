@@ -32,6 +32,7 @@ run-playbook() {
   playbook="$2"
   docker run -it \
     --net host \
+    -v /var/run/docker.sock:/var/run/docker.sock \
     --rm \
     election-prediction/provisioning \
     "${inventory}" \

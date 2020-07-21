@@ -24,3 +24,16 @@
         - collector.properties
         - core-site.xml
         - hdfs-site.xml
+
+- hosts: localhost
+  tasks:
+    - name: Push project images
+      docker_image:
+        name: "election-prediction/{{ item }}"
+        repository: "{{ docker_registry }}/election-prediction/{{ item }}"
+        source: local
+        push: true
+      loop:
+        - crawler
+        - emotion-detector
+        - stream-processor
