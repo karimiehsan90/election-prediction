@@ -1,5 +1,5 @@
 ---
-project-machines:
+all:
   vars:
     project_config_dir: /etc/election-prediction
     docker_registry: "{{ groups['docker-registry'] | first }}:{{ docker_registry_port }}"
