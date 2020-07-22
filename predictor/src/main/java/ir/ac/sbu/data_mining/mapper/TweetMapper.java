@@ -12,14 +12,7 @@ public class TweetMapper extends Mapper<Object, Text, Text, IntWritable> {
         String[] valArr = value.toString().split(" ");
         String emotion = valArr[2];
         String political = valArr[3];
-        int rate;
-        switch (emotion) {
-            case  "joy": rate = 10; break;
-            case  "anger": rate = -4; break;
-            case  "fear": rate = -2; break;
-            case  "sadness": rate = -1; break;
-            default: rate = 0;
-        }
+        int rate = context.getConfiguration().getInt(emotion, 0);
         context.write(new Text(political), new IntWritable(rate));
     }
 }

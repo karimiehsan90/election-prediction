@@ -15,6 +15,12 @@ import java.io.IOException;
 public class App {
     public static void main( String[] args ) throws IOException, InterruptedException, ClassNotFoundException {
         Configuration conf = new Configuration();
+        for (String arg : args) {
+            String[] keyValue = arg.split("=");
+            if (keyValue.length == 2) {
+                conf.setInt(keyValue[0], Integer.parseInt(keyValue[1]));
+            }
+        }
         Job job = Job.getInstance(conf, "predictor");
         job.setMapperClass(TweetMapper.class);
         job.setCombinerClass(SumReducer.class);
