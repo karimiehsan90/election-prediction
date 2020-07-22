@@ -16,6 +16,12 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class App {
     public static void main( String[] args ) throws IOException, InterruptedException, ClassNotFoundException {
         Configuration conf = new Configuration();
+        for (String arg : args) {
+            String[] keyValue = arg.split("=");
+            if (keyValue.length == 2) {
+                conf.setInt(keyValue[0], Integer.parseInt(keyValue[1]));
+            }
+        }
         Job job = Job.getInstance(conf, "reporter");
         job.setMapperClass(TweetMapper.class);
         job.setCombinerClass(CountReducer.class);

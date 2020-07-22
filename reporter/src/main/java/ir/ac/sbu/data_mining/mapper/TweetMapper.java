@@ -13,9 +13,21 @@ public class TweetMapper extends Mapper<Object, Text, Text, IntWritable> {
     public void map(Object key, Text value, Context context) 
         throws IOException, InterruptedException {
         String[] valueArr = value.toString().split(" ");
-        word.set("emotion: " + valueArr[2]);
+        //--- new added
+        word.set("emotion score: " + valueArr[2]);
+        int retweetCount = Integer.parseInt(valueArr[1]);
+        int rate = context.getConfiguration().getInt(valueArr[2], 0);
+        int threshold = context.getConfiguration().getInt("threshold", 0);
+        if (threshold>0){
+            int coefficient = Math.round(retweetCount/threshold) +1;
+            rate = rate * coefficient ;
+        }
+        context.write(word, new IntWritable(rate));
+        //--- end added
+
+        word.set("emotion count: " + valueArr[2]);
         context.write(word, one);
-        word.set("political: " + valueArr[3]);
+        word.set("political count: " + valueArr[3]);
         context.write(word, one);
     }
 }
