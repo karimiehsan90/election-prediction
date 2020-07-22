@@ -15,8 +15,8 @@ public class TweetMapper extends Mapper<Object, Text, Text, IntWritable> {
         int retweetCount = Integer.parseInt(valArr[1]);
         int rate = context.getConfiguration().getInt(emotion, 0);
         int threshold = context.getConfiguration().getInt("threshold", 0);
-        if (retweetCount>threshold && threshold>0){
-            int coefficient = retweetCount/threshold;
+        if (threshold>0){
+            int coefficient = Math.round(retweetCount/threshold) +1;
             rate = rate * coefficient ;
         }
         context.write(new Text(political), new IntWritable(rate));
