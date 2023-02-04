@@ -1,8 +1,8 @@
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu1604"
-  config.vm.box_url = "http://main:8080/libvirt.box"
+  config.vm.box = "ubuntu1804"
+  config.vm.box_url = "http://main:8080/libvirt18.box"
 
   config.vm.define "master" do |host|
     host.vm.network :private_network,ip: '192.168.100.101'
