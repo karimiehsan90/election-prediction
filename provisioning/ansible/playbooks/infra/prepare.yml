@@ -8,8 +8,6 @@
     - name: Install python and pip
       become: true
       apt:
-        deb: "{{ item }}"
+        name: python3-pip
         state: present
-      loop:
-        - http://main:8080/python3_3.5.1-3_amd64.deb
-        - http://main:8080/python3-pip_8.1.1-2ubuntu0.4_all.deb
+        update_cache: true
